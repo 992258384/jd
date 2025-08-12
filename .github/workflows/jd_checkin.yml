@@ -1,0 +1,26 @@
+name: JD 京豆签到
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 每天 UTC 1点，即北京时间早9点
+  workflow_dispatch:
+
+jobs:
+  jd_checkin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run JD Signin
+        env:
+          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        run: python jd_checkin.py
